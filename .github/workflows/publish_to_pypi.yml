@@ -21,7 +21,6 @@ jobs:
             pip install poetry
             poetry build
 
-      - name: Deploy To PyPi Using Twine
+      - name: Deploy To PyPi
         run: |
-          pip install twine
-          twine upload -r ${{ secrets.PYPI_REPOSITORY}} --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_TOKEN }} dist/*
+          poetry publish -n -v --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_TOKEN }}
