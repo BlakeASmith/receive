@@ -2,6 +2,20 @@
 
 `receive` is a python library for hosting temporary web servers and receiving values from their route handlers via futures. 
 
+## Install
+
+### Stable Release
+
+```
+pip install receive
+```
+
+### Latest Features
+
+```
+pip install git+https://github.com/BlakeASmith/receive
+```
+
 ## Usage
 
 ### Handle a GET request
@@ -38,3 +52,13 @@ return value from the handler. `get_query_param_from_request` will return immedi
 `await` on the returned future will block until a `GET 0.0.0.0:5000/callback` request hits the server. At that time the future will be completed with the 
 value returned from the request handler and the 
 server will be shutdown.
+
+
+## Tests
+
+Run the unit tests using pytest
+
+```
+poetry install
+poetry run pytest
+```
