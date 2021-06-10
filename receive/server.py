@@ -1,5 +1,8 @@
+import logging
 import asyncio
 from aiohttp import web
+
+logger = logging.getLogger(__name__)
 
 
 def get_request(route, host=None, port=None, loop=None):
@@ -20,24 +23,28 @@ def get_request(route, host=None, port=None, loop=None):
 
         @routes.get(route)
         async def handler(request):
-            try:
-                return_value.set_result(await receiver(request))
-                await (await shutdown)()
-            except Exception as e:
-                return_value.set_exception(e)
-                raise e
+            return_value.set_result(await receiver(request))
+            shutdown.set_result(True)
+            logger.info("Sending response")
+            return web.Response(text="Received.")
 
         app.add_routes(routes)
+
+        async def await_shutdown(server):
+            await shutdown
+            await server.cleanup()
+            return await return_value
 
         async def run_server():
             runner = web.AppRunner(app)
             await runner.setup()
             site = web.TCPSite(runner, host, port)
             await site.start()
+            logger.info("Started HTTP server.")
 
-            shutdown.set_result(runner.cleanup)
-
-            return return_value
+            return await_shutdown(runner)
 
         return run_server
+
+        logger.info("decorated")
     return decorator
