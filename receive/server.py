@@ -37,7 +37,7 @@ def get_request(route, host=None, port=None, loop=None):
 
             shutdown.set_result(runner.cleanup)
 
-            return await return_value
+            return return_value
 
         return run_server
     return decorator
