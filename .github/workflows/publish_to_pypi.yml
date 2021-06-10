@@ -1,0 +1,27 @@
+name: PyPi Publish
+
+on:
+  release:
+    types: [ published ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.9-buster
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare Distribution
+        run: |
+            pip install poetry
+            poetry build
+
+      - name: Deploy To PyPi Using Twine
+        run: |
+          pip install twine
+          twine upload -r ${{ secrets.PYPI_REPOSITORY}} --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_TOKEN }} dist/*
