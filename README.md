@@ -41,10 +41,9 @@ async def main():
     future = await get_query_param_from_request()
     code = await future
     print(code)
-    
-    
+
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(main)
+    asyncio.run(main())
 ```
 
 The `get_query_param_from_request` function will start a web server in the background and return a `asyncio.Future` object providing access to the 
